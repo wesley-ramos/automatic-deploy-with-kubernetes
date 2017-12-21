@@ -43,77 +43,77 @@ EOT
 
 function create_deployment_file_for_external_service() {
   cat <<EOT > ./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
-  apiVersion: extensions/v1beta1
-  kind: Deployment
-  metadata:
-    name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-    namespace: ${ENVIRONMENT_NAME}
-    labels:
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
+  namespace: ${ENVIRONMENT_NAME}
+  labels:
+    environment: ${ENVIRONMENT_NAME}
+    application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
       environment: ${ENVIRONMENT_NAME}
       application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-  spec:
-    replicas: 1
-    selector:
-      matchLabels:
+  template:
+    metadata:
+      labels:
         environment: ${ENVIRONMENT_NAME}
         application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-    template:
-      metadata:
-        labels:
-          environment: ${ENVIRONMENT_NAME}
-          application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-      spec:
-        containers:
-          - name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-            image: "${IMAGE}"
-            imagePullPolicy: Always
-            ports:
-              - containerPort: 8080
-            env:
-              - name: SPRING_CLOUD_CONFIG_LABEL
-                value: "$ENVIRONMENT_NAME"
-              - name: SERVER_PORT
-                value: "8080"
-        imagePullSecrets:
-          - name: involvesregistry
-  ---
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-    namespace: ${ENVIRONMENT_NAME}
-    labels:
-      application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-  spec:
-    type: NodePort
-    selector:
-      application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-    ports:
-    - port: 8080
-      targetPort: 8080
-  ---
-  apiVersion: extensions/v1beta1
-  kind: Ingress
-  metadata:
-    name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-    namespace: ${ENVIRONMENT_NAME}
-    annotations:
-      kubernetes.io/ingress.class: "nginx"
-      ingress.kubernetes.io/ssl-redirect: "true"
-      ingress.kubernetes.io/rewrite-target: /
-  spec:
-    tls:
-    - hosts:
-      - ${ENVIRONMENT_NAME}-cloud.agilepromoter.com
-      secretName: agilepromoter-cert
-    rules:
-    - host: "${ENVIRONMENT_NAME}-cloud.agilepromoter.com"
-      http:
-        paths:
-        - path: /${REDIRECT}
-          backend:
-            serviceName: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-            servicePort: 8080
+    spec:
+      containers:
+        - name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
+          image: "${IMAGE}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_CLOUD_CONFIG_LABEL
+              value: "$ENVIRONMENT_NAME"
+            - name: SERVER_PORT
+              value: "8080"
+      imagePullSecrets:
+        - name: involvesregistry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
+  namespace: ${ENVIRONMENT_NAME}
+  labels:
+    application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
+spec:
+  type: NodePort
+  selector:
+    application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
+  namespace: ${ENVIRONMENT_NAME}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - ${ENVIRONMENT_NAME}-cloud.agilepromoter.com
+    secretName: agilepromoter-cert
+  rules:
+  - host: "${ENVIRONMENT_NAME}-cloud.agilepromoter.com"
+    http:
+      paths:
+      - path: /${PATH}
+        backend:
+          serviceName: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
+          servicePort: 8080
 EOT
 }
 
