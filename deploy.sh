@@ -13,15 +13,16 @@
 #  image: Image of the application, service that will run in the container.
 #  replicas: Number of service replicas.
 #  host: Host of kubernetes
+#  secret:
 #  path: Service address.
 #  force: Force deploy recreation
 #
 # Ex:
 #   - Public services:
-#      ./deploy.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1 --path=service-path --force=false
+#      ./deploy.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1 --force=false --host=my-host --secret=deploy-secret --registry=repo-image --path=service-path
 #
 #   - Private services:
-#     ./deploy.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1  --force=false
+#     ./deploy.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1  --force=false --host=my-host --secret=deploy-secret --registry=repo-image
 #
 #
 
@@ -63,6 +64,15 @@ while [ "$1" != "" ]; do
     -p | --path)
       PATH=$VALUE
       ;;
+    -h | --host)
+      HOST=$VALUE
+      ;;
+    -s | --secret)
+      SECRET=$VALUE
+      ;;
+    -re | --registry)
+      REGISTRY=$VALUE
+      ;;
     -f | --force)
       FORCE=$VALUE
       ;;
@@ -86,6 +96,15 @@ elif [[  -z "$APPLICATION_NAME" ]]; then
   exit 1
 elif [[ -z "$IMAGE" ]]; then
   echo "Application image not set, please set --image"
+  exit 1
+elif [[  -z "$HOST" ]]; then
+  echo "Host not set, please set --host"
+  exit 1
+elif [[ -z "$SECRET" ]]; then
+  echo "Secret not set, please set --secret"
+  exit 1
+elif [[ -z "$REGISTRY" ]]; then
+  echo "Registry not set, please set --registry"
   exit 1
 fi
 

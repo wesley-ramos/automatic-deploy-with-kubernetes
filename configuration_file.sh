@@ -75,7 +75,7 @@ spec:
             - name: SERVER_PORT
               value: "8080"
       imagePullSecrets:
-        - name: involvesregistry
+        - name: ${REGISTRY}
 ---
 apiVersion: v1
 kind: Service
@@ -104,8 +104,8 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ${ENVIRONMENT_NAME}-cloud.agilepromoter.com
-    secretName: agilepromoter-cert
+    - ${HOST}
+    secretName: ${SECRET}
   rules:
   - host: "${ENVIRONMENT_NAME}-cloud.agilepromoter.com"
     http:
