@@ -19,7 +19,7 @@
 #
 # Ex:
 #   - Public services:
-#      ./start.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1 --force=false --host=my-host --secret=deploy-secret --registry=repo-image --path=service-path
+#      ./start.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1 --force=false --host=my-host --secret=deploy-secret --registry=repo-image --expose=service-path --configuration-directory=./
 #
 #   - Private services:
 #     ./start.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1  --force=false --host=my-host --secret=deploy-secret --registry=repo-image
@@ -41,6 +41,7 @@ source ./deploy.sh
 
 REPLICAS=1
 FORCE="false"
+CONFIGURATION_DIRECTORY="./"
 
 #
 # Reads the parameters
@@ -62,8 +63,11 @@ while [ "$1" != "" ]; do
     -r | --replicas)
       REPLICAS=$VALUE
       ;;
-    -p | --path)
-      SERVICE_PATH=$VALUE
+    -p | --expose)
+      EXPOSE=$VALUE
+      ;;
+    -c | --configuration-directory)
+      CONFIGURATION_DIRECTORY=$VALUE
       ;;
     -h | --host)
       HOST_NAME=$VALUE

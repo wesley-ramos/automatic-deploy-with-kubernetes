@@ -21,7 +21,7 @@ function delete_deployment_kubernetes() {
   deployment_exists=$( check_deployment_exists_in_kubernetes )
 
   if [[ $deployment_exists == 'true' ]]; then
-    kubectl --namespace=${ENVIRONMENT_NAME} delete -f ./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
+    kubectl --namespace=${ENVIRONMENT_NAME} delete -f ${CONFIGURATION_DIRECTORY}${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
   fi
 }
 
@@ -32,6 +32,6 @@ function start_deploy_in_kubernetes() {
        then
           kubectl --namespace=${ENVIRONMENT_NAME} set image deployment/${ENVIRONMENT_NAME}-${APPLICATION_NAME} ${ENVIRONMENT_NAME}-${APPLICATION_NAME}=$IMAGE
        else
-          kubectl --namespace=${ENVIRONMENT_NAME} create -f ./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
+          kubectl --namespace=${ENVIRONMENT_NAME} create -f ${CONFIGURATION_DIRECTORY}${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
     fi
 }

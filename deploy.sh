@@ -23,5 +23,5 @@ function start_deploy_process() {
       update_configuration_file
   fi
 
-  start_deploy_in_kubernetes  
+  start_deploy_in_kubernetes
 }

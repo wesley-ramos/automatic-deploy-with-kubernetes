@@ -7,7 +7,7 @@
 #
 
 function create_deployment_file_for_internal_service() {
-cat <<EOT > ./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
+cat <<EOT > ${CONFIGURATION_DIRECTORY}${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -42,7 +42,7 @@ EOT
 
 
 function create_deployment_file_for_external_service() {
-  cat <<EOT > ./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
+  cat <<EOT > ${CONFIGURATION_DIRECTORY}${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -110,7 +110,7 @@ spec:
   - host: "${HOST_NAME}"
     http:
       paths:
-      - path: /${SERVICE_PATH}
+      - path: /${EXPOSE}
         backend:
           serviceName: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
           servicePort: 8080
@@ -118,7 +118,7 @@ EOT
 }
 
 function check_configuration_file_exists() {
-  if [ -e "./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml" ]
+  if [ -e "${CONFIGURATION_DIRECTORY}${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml" ]
     then
       echo "true"
     else
@@ -127,7 +127,7 @@ function check_configuration_file_exists() {
 }
 
 function generate_configuration_file() {
-  if [[ -z "$SERVICE_PATH" ]]
+  if [[ -z "$EXPOSE" ]]
     then
       create_deployment_file_for_internal_service
     else
@@ -147,6 +147,6 @@ function delete_configuration_file() {
 
   if [[ $deploy_configuration_exists == 'true' ]];
     then
-      rm -f "./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml"
+      rm -f "${CONFIGURATION_DIRECTORY}${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml"
   fi
 }
