@@ -104,13 +104,13 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ${HOST}
+    - ${HOST_NAME}
     secretName: ${SECRET}
   rules:
-  - host: "${ENVIRONMENT_NAME}-cloud.agilepromoter.com"
+  - host: "${HOST_NAME}"
     http:
       paths:
-      - path: /${PATH}
+      - path: /${SERVICE_PATH}
         backend:
           serviceName: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
           servicePort: 8080
@@ -127,10 +127,26 @@ function check_configuration_file_exists() {
 }
 
 function generate_configuration_file() {
-  if [[ -z "$PATH" ]]
+  if [[ -z "$SERVICE_PATH" ]]
     then
       create_deployment_file_for_internal_service
     else
       create_deployment_file_for_external_service
+  fi
+}
+
+function update_configuration_file() {
+  IMAGE_QUOTE="${IMAGE//[\/]/\\/}"
+  IMAGE_QUOTE="${IMAGE_QUOTE//[\:]/\\:}"
+
+  sed -i 's/image:\(.*\)/image: '${IMAGE_QUOTE}'/g' "./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml"
+}
+
+function delete_configuration_file() {
+  deploy_configuration_exists=$( check_configuration_file_exists )
+
+  if [[ $deploy_configuration_exists == 'true' ]];
+    then
+      rm -f "./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml"
   fi
 }
