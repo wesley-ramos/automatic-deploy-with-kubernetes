@@ -139,7 +139,7 @@ function update_configuration_file() {
   IMAGE_QUOTE="${IMAGE//[\/]/\\/}"
   IMAGE_QUOTE="${IMAGE_QUOTE//[\:]/\\:}"
 
-  sed -i 's/image:\(.*\)/image: '${IMAGE_QUOTE}'/g' "./${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml"
+  sed -i 's/image:\(.*\)/image: '${IMAGE_QUOTE}'/g' "${CONFIGURATION_DIRECTORY}${ENVIRONMENT_NAME}-${APPLICATION_NAME}.yml"
 }
 
 function delete_configuration_file() {
