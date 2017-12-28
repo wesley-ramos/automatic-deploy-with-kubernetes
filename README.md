@@ -2,6 +2,7 @@
 
 ## Introduction
 This guide will take you through the steps necessary to continuously deliver your software to end users. If you are not familiar with basic Kubernetes concepts, have a look at [Kubernetes 101](https://kubernetes.io/docs/user-guide/walkthrough).
+
 In order to accomplish this goal you will use the following Jenkins plugins:
   - [GitHub Pull Request Builder](https://wiki.jenkins.io/display/JENKINS/GitHub+pull+request+builder+plugin) - 
   - [GitHub hook trigger for GITScm polling](https://wiki.jenkins.io/display/JENKINS/GitHub+Plugin) - 
