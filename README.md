@@ -16,3 +16,5 @@ In order to deploy the application with [Kubernetes](http://kubernetes.io/) you 
   - [Secrets](http://kubernetes.io/docs/user-guide/secrets/) - secure storage of non public configuration information, SSL certs specifically in our case
 
 ## Prerequisites
+ - Jenkins
+ - Kubernetes 
