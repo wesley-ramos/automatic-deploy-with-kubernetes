@@ -19,10 +19,10 @@
 #
 # Ex:
 #   - Public services:
-#      ./start.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1 --force=false --host=my-host --secret=deploy-secret --registry=repo-image --expose=service-path --configuration-directory=./
+#      ./start.sh --environment=staging --namespace=staging --name=my-service --image=image-of-my-service --replicas=1 --force=false --host=my-host --secret=deploy-secret --registry=repo-image --expose=service-path --configuration-directory=./
 #
 #   - Private services:
-#     ./start.sh --environment=staging --name=my-service --image=image-of-my-service --replicas=1  --force=false --host=my-host --secret=deploy-secret --registry=repo-image
+#     ./start.sh --environment=staging --namespace=staging --name=my-service --image=image-of-my-service --replicas=1  --force=false --host=my-host --secret=deploy-secret --registry=repo-image
 #
 #
 
@@ -57,6 +57,9 @@ while [ "$1" != "" ]; do
     -e | --environment )
       ENVIRONMENT_NAME=$VALUE
       ;;
+    -e | --namespace )
+      NAMESPACE=$VALUE
+      ;;  
     -i | --image)
       IMAGE=$VALUE
       ;;
@@ -99,6 +102,9 @@ if [[ -z "$ENVIRONMENT_NAME" ]]; then
 elif [[  -z "$APPLICATION_NAME" ]]; then
   echo "Application name not set, please set --name"
   exit 1
+elif [[  -z "$NAMESPACE" ]]; then
+  echo "Namespace not set, please set --namespace"
+  exit 1  
 elif [[ -z "$IMAGE" ]]; then
   echo "Application image not set, please set --image"
   exit 1
@@ -112,6 +118,7 @@ elif [[ -z "$REGISTRY" ]]; then
   echo "Registry not set, please set --registry"
   exit 1
 fi
+
 
 #
 #  Starts the deploy process

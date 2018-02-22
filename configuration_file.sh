@@ -12,7 +12,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-  namespace: ${ENVIRONMENT_NAME}
+  namespace: ${NAMESPACE}
   labels:
     environment: ${ENVIRONMENT_NAME}
     application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
@@ -47,7 +47,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-  namespace: ${ENVIRONMENT_NAME}
+  namespace: ${NAMESPACE}
   labels:
     environment: ${ENVIRONMENT_NAME}
     application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
@@ -81,7 +81,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-  namespace: ${ENVIRONMENT_NAME}
+  namespace: ${NAMESPACE}
   labels:
     application: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
 spec:
@@ -96,7 +96,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ${ENVIRONMENT_NAME}-${APPLICATION_NAME}
-  namespace: ${ENVIRONMENT_NAME}
+  namespace: ${NAMESPACE}
   annotations:
     kubernetes.io/ingress.class: "nginx"
     ingress.kubernetes.io/ssl-redirect: "true"
